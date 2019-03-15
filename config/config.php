@@ -2,14 +2,18 @@
 
 require_once('dbconfig.php');
 
+/**
+ * Main Class called USER
+ */
 class User
 {
-
+	/**
+	 * Connector for databases
+	 */
 	private $conn;
 
-	/*
-		Database Constructor
-		Initializing database
+	/**
+	 * Initialize Database
 	 */
 
 	public function __construct() {
@@ -20,12 +24,12 @@ class User
 
 	}
 
-	/*
-		Database Querying
-	 *	
+	/**
+	 * Function for querying
+	 *
+	 * @param string $sql
+	 * @return $stmt
 	 */
-
-
 	public function runQuery($sql) {
 
 		$stmt = $this->conn->prepare($sql);
@@ -33,13 +37,12 @@ class User
 
 	}
 
-	/*
-	
-		Checking of inputs
-		Securing of data
-
+	/**
+	 * Function for Sanitizing data
+	 *
+	 * @param string $data
+	 * @return $data
 	 */
-	
 	public function checkInput($data) {
 
 		$data = trim($data);
@@ -49,20 +52,23 @@ class User
 
 	}
 
-	/*
-		
-		immediate redirecting
-
+	/**
+	 * Function for redirecting
+	 *
+	 * @param string $url
+	 * @return void
 	 */
-	
 	public function redirect($url) {
 
 		header("Location: $url");
 
 	}
 
-	/*
-		redirecting with 5 seconds interval
+	/**
+	 * Function for redirecting with
+	 * 5 seconds interval
+	 * @param string $url
+	 * @return void
 	 */
 	public function slow_redirect($url){
 
@@ -70,12 +76,11 @@ class User
 
 	}
 
-	/*
-	
-		session holder
-
+	/**
+	 * Function if user is logged in
+	 *
+	 * @return boolean
 	 */
-	
 	public function is_loggedin() {
 
     	if(isset($_SESSION['username']) || isset($_SESSION['email'])) {
@@ -84,12 +89,14 @@ class User
 
   	}
 
-  	/*
-  	
-  		sending of sms
-
-  	 */
-  	
+  	/**
+	 * Function for OTP using SMS
+	 *
+	 * @param string $number
+	 * @param string $message
+	 * @param string $apicode
+	 * @return void
+	 */
   	public function send_code($number, $message, $apicode){
 
   		$url = 'https://www.itexmo.com/php_api/api.php';
@@ -106,12 +113,13 @@ class User
 
 	}
 
-	/*
-  		sending of email
-  		account_register.php
-		
-  	 */
-  	
+	/**
+	 * Function for OTP using email
+	 *
+	 * @param string $token
+	 * @param string $email_session
+	 * @return void
+	 */
   	public function send_email($token, $email_session){
 
   		try {
@@ -140,24 +148,26 @@ class User
 				  Kind Regards,<br>
 				  Administrator, Barangay Salitran II
 				";
-				
+
 				if(!$mail->send()) {
 				  echo 'Message could not be sent.';
 				  echo 'Mailer Error: ' . $mail->ErrorInfo;
 				} else {
-				  
+
 				}
-                
+
   		} catch (PDOException $e) {
-  			echo $e->getMessage();	
+  			echo $e->getMessage();
   		}
   	}
 
-  	/*
-		Generating random strings
-		account_register.php && reset_password.php
-  	 */
-  	
+  	/**
+	   * Function for creating token for OTP
+	   *
+	   * @param string $token
+	   * @param integer $len
+	   * @return $token
+	   */
   	public function generateNewString($len = 5) {
 
   		$token = "abcdefghijklmnopqrstuvwxyz1234567890";
@@ -167,11 +177,17 @@ class User
 
   	}
 
-	/*
-		Registration of User
-		account_register.php
-	 */
 
+	/**
+	 * Function for register
+	 *
+	 * @param string $username
+	 * @param string $email
+	 * @param string $password
+	 * @param string $mobile_number
+	 * @param string $token
+	 * @return $stmt and $stmt1
+	 */
 	public function register($username, $email, $password, $mobile_number, $token) {
 
 
@@ -192,28 +208,31 @@ class User
 		    $stmt->bindparam(":mobile_number", $mobile_number);
 		    $stmt->bindparam(":status", $status);
 		    $stmt->bindparam(":user_email_token", $token);
-		    $stmt->bindparam(":dateCreated", $dateCreated);                      
-		        
+		    $stmt->bindparam(":dateCreated", $dateCreated);
+
 		    $stmt1->bindparam(":residents_mobile_number", $mobile_number);
 
-		    $stmt->execute(); 
+		    $stmt->execute();
 		    $stmt1->execute();
-		      
+
 		    return $stmt;
 		    return $stmt1;
 
 		} catch (PDOException $e) {
-			
+
 			echo $e->getMessage();
 
 		}
 	}
 
-	/*
-		login of user
-		login.php
+	/**
+	 * Function for logging in
+	 *
+	 * @param string $username
+	 * @param string $email
+	 * @param string $password
+	 * @return boolean
 	 */
-
 	public function user_login($username, $email, $password) {
 
 		try {
@@ -241,18 +260,33 @@ class User
 		    }
 
 		} catch (PDOException $e) {
-			
+
 			echo $e->getMessage();
 
-		}	
+		}
 
 	}
 
-	/*
-		Inserting of personal info of user
-		account_setup.php
+	/**
+	 * Function for inserting of info right after
+	 * registration of user.
+	 *
+	 * Required.
+	 *
+	 * @param string $firstname
+	 * @param string $prefix
+	 * @param string $middlename
+	 * @param string $lastname
+	 * @param string $suffix
+	 * @param string $gender
+	 * @param string $birthday
+	 * @param string $age
+	 * @param string $birthplace
+	 * @param string $block
+	 * @param string $street
+	 * @param string $subdivision
+	 * @return $stmt
 	 */
-	
 	public function save_user_info($prefix, $firstname, $middlename, $lastname, $suffix, $gender, $birthday, $age, $birthplace, $block, $street, $subdivision) {
 
 		try {
@@ -269,24 +303,24 @@ class User
 		    $stmt->bindparam(":birthday", $birthday);
 		    $stmt->bindparam(":age", $age);
 		    $stmt->bindparam(":birthplace", $birthplace);
-		    $stmt->bindparam(":full_address", $full_address);                      
-		        
-		    $stmt->execute(); 
-		      
+		    $stmt->bindparam(":full_address", $full_address);
+
+		    $stmt->execute();
+
 		    return $stmt;
 
 		} catch (PDOException $e) {
-			
+
 			echo $e->getMessage();
 
 		}
 	}
 
-	/*
-		Log out function
-		for user and admin
+	/**
+	 * function for logout
+	 *
+	 * @return boolean
 	 */
-
 	public function doLogout() {
 
 		session_destroy();
@@ -296,23 +330,138 @@ class User
 
 	}
 
-	/*
-		requesting of appointment
-		user_appointment_request.php
-
+	/**
+	 * Function for requesting of appointment
+	 *
+	 * @param string $username
+	 * @param string $fullname
+	 * @param string $email
+	 * @param string $contactnumber
+	 * @param date $appointmentDate
+	 * @param date $appointmentTime
+	 * @param string $purpose
+	 * @param string $status
+	 * @param date $date_requested
+	 * @return $stmt
 	 */
-	
-	public function requestAppointment($fullname, $email, $contactnumber, $appointmentDate, $appointmentTime, $purpose) {
+	public function requestAppointment($username, $fullname, $email, $contactnumber, $appointmentDate, $appointmentTime, $purpose, $status, $date_requested) {
 
 		try {
 
-			$stmt = $this->conn->prepare("INSERT INTO appointment_tbl(residents_prefix, residents_first_name, residents_middle_name, residents_last_name, residents_suffix, residents_gender, residents_birthday, residents_age, residents_birthplace, residents_home_address) VALUES (:prefix, :firstname, :middlename, :lastname, :suffix, :gender, :birthday, :age, :birthplace, :full_address)");
+			$stmt = $this->conn->prepare("INSERT INTO appointment_tbl(appointment_username, appointment_fullname, appointment_email, appointment_contactnumber, appointment_date, appointment_time, appointment_purpose, appointment_daterequested, appointment_status) VALUES (:username, :fullname, :email, :contactnumber, :appointmentdate, :appointmenttime, :appointmentpurpose, :appointmentdaterequested, :appointmentstatus)");
 
-			
+			$stmt->bindparam(":username", $username);
+		    $stmt->bindparam(":fullname", $fullname);
+		    $stmt->bindparam(":email", $email);
+		    $stmt->bindparam(":contactnumber", $contactnumber);
+		    $stmt->bindparam(":appointmentdate", $appointmentDate);
+		    $stmt->bindparam(":appointmenttime", $appointmentTime);
+		    $stmt->bindparam(":appointmentpurpose", $purpose);
+		    $stmt->bindparam(":appointmentdaterequested", $date_requested);
+			$stmt->bindparam(":appointmentstatus", $status);
+
+			$stmt->execute();
+
+		    return $stmt;
+
 		} catch (PDOException $e) {
-			
+			echo $e->getMessage();
 		}
 	}
 
+	/**
+	 * Function for sending email confirmation
+	 * for appointment
+	 *
+	 * @param string $email_session
+	 * @param date $appointmentDate
+	 * @param time $appointmentTime
+	 * @param string $purpose
+	 * @return void
+	 */
+  	public function send_appointment_confirmation_email($email_session, $appointmentDate, $appointmentTime, $purpose){
+
+		try {
+
+			  require './PHPMailer-5.2-stable/PHPMailerAutoload.php';
+
+			  $mail = new PHPMailer;
+			  $mail->isSMTP();                                      // Set mailer to use SMTP
+			  $mail->Host = 'smtp.gmail.com';             		  // Specify main and backup SMTP servers
+			  $mail->SMTPAuth = true;                               // Enable SMTP authentication
+			  $mail->Username = 'service.salitrandos@gmail.com';    // SMTP username
+			  $mail->Password = 'p@ssphr@s3';                       // SMTP password
+			  $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+			  $mail->Port = 587;                                    // TCP port to connect to
+
+			  $mail->setFrom('service.salitrandos@gmail.com', 'Barangay Salitran II');
+			  $mail->addAddress($email_session);     						  // Add a recipient
+
+			  $mail->isHTML(true);                                  // Set email format to HTML
+
+			  $mail->Subject = 'Your Appointment Details';
+			  $mail->Body    = "
+				Hi! , <br><br>
+				Your request for appointment on " . $appointmentDate->format('F-d-Y') . ", ". $appointmentTime. " to request for " . $purpose . " is now being processed. <br><br>
+				We will contact you for the update.<br><br>
+				Kind Regards,<br>
+				Administrator, Barangay Salitran II
+			  ";
+
+			  if(!$mail->send()) {
+				echo 'Message could not be sent.';
+				echo 'Mailer Error: ' . $mail->ErrorInfo;
+			  } else {
+
+			  }
+
+		} catch (PDOException $e) {
+			echo $e->getMessage();
+		}
+	}
+
+	/**
+	 * Function for updating appointment
+	 *
+	 * @param string $username
+	 * @param string $fullname
+	 * @param string $email
+	 * @param string $contactnumber
+	 * @param date $appointmentDate
+	 * @param date $appointmentTime
+	 * @param string $purpose
+	 * @param string $status
+	 * @param date $date_requested
+	 * @return $stmt
+	 */
+	public function requestUpdateAppointment($username, $fullname, $email, $contactnumber, $appointmentDate, $appointmentTime, $purpose, $status, $date_requested) {
+
+		try {
+
+			$stmt = $this->conn->prepare("INSERT INTO appointment_tbl(appointment_username, appointment_fullname, appointment_email, appointment_contactnumber, appointment_date, appointment_time, appointment_purpose, appointment_daterequested, appointment_status) VALUES (:username, :fullname, :email, :contactnumber, :appointmentdate, :appointmenttime, :appointmentpurpose, :appointmentdaterequested, :appointmentstatus)");
+
+			$stmt->bindparam(":username", $username);
+		    $stmt->bindparam(":fullname", $fullname);
+		    $stmt->bindparam(":email", $email);
+		    $stmt->bindparam(":contactnumber", $contactnumber);
+		    $stmt->bindparam(":appointmentdate", $appointmentDate);
+		    $stmt->bindparam(":appointmenttime", $appointmentTime);
+		    $stmt->bindparam(":appointmentpurpose", $purpose);
+		    $stmt->bindparam(":appointmentdaterequested", $date_requested);
+			$stmt->bindparam(":appointmentstatus", $status);
+
+			$stmt->execute();
+
+		    return $stmt;
+
+		} catch (PDOException $e) {
+			echo $e->getMessage();
+		}
+	}
+
+/**
+ *	End of User Class
+ *
+ */
 }
 ?>
