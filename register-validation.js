@@ -161,7 +161,7 @@ $(function(){
 
         } else {
 
-            alert("Please fill up the form correctly.");
+            swal("Oops!", "Please fill-up the form correctly!", "error");
             return false;
 
         }     

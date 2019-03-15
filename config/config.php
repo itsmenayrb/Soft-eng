@@ -290,7 +290,8 @@ class User
 	public function doLogout() {
 
 		session_destroy();
-	    unset($_SESSION['user_session']);
+	    unset($_SESSION['username']);
+	    unset($_SESSION['email']);
 	    return true;
 
 	}
@@ -305,14 +306,13 @@ class User
 
 		try {
 
-			$stmt = $this->conn->prepare("INSERT INTO residents_tbl(residents_prefix, residents_first_name, residents_middle_name, residents_last_name, residents_suffix, residents_gender, residents_birthday, residents_age, residents_birthplace, residents_home_address) VALUES (:prefix, :firstname, :middlename, :lastname, :suffix, :gender, :birthday, :age, :birthplace, :full_address)");
+			$stmt = $this->conn->prepare("INSERT INTO appointment_tbl(residents_prefix, residents_first_name, residents_middle_name, residents_last_name, residents_suffix, residents_gender, residents_birthday, residents_age, residents_birthplace, residents_home_address) VALUES (:prefix, :firstname, :middlename, :lastname, :suffix, :gender, :birthday, :age, :birthplace, :full_address)");
 
 			
 		} catch (PDOException $e) {
 			
 		}
-
-
 	}
+
 }
 ?>

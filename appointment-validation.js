@@ -27,12 +27,12 @@ $(function(){
     });
 
     $("#requestpurpose").focusout(function(){
-        checkAppointmentTime();
+        checkPurpose();
     });
 
     function checkFullname() {
 
-        var pattern = /^[a-zA-Z., ]$/;
+        var pattern = /^[a-zA-Z., ]*$/;
         var fullname = $("#requestfullname").val();
 
         if( pattern.test(fullname) && fullname !== "") {
@@ -57,7 +57,7 @@ $(function(){
     function checkEmail() {
 
         var pattern = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-        var email = $("#registerEmail").val();
+        var email = $("#requestemail").val();
 
         if( pattern.test(email) && email !== "") {
 
@@ -81,191 +81,106 @@ $(function(){
     function checkNumber() {
 
         var pattern = /^[0-9]{10,}$/;
-        var number = $("#registerNumber").val();
+        var number = $("#requestcontact").val();
 
         if( pattern.test(number) && number !== "") {
 
-            $("#registerNumber").css("border", "1px solid #2ecc71");
-            $("#registerNumber").css("background", "#fff");
-            $("#errorNumberDisplay").hide();
+            $("#requestcontact").css("border", "1px solid #2ecc71");
+            $("#requestcontact").css("background", "#fff");
+            $("#errorContactDisplay").hide();
 
         } else {
 
-            $("#errorNumberDisplay").html("<small>Invalid mobile number</small>");
-            $("#errorNumberDisplay").addClass("text-center text-danger");
-            $("#errorNumberDisplay").show();
-            $("#registerNumber").css("border", "1px solid #f25a6b");
-            $("#registerNumber").css("background", "#fde8eb");
+            $("#errorContactDisplay").html("<small>Invalid mobile number</small>");
+            $("#errorContactDisplay").addClass("text-center text-danger");
+            $("#errorContactDisplay").show();
+            $("#requestcontact").css("border", "1px solid #f25a6b");
+            $("#requestcontact").css("background", "#fde8eb");
             error = true;
 
         }
 
     }
 
-    function checkPassword() {
+    function checkAppointmentDate() {
 
-        var password = $("#registerPassword").val().length;
+        var appointmentDate = $("#appointmentDate").val();
 
-        if( password >= 8) {
+        if( appointmentDate !== "") {
 
-            $("#registerPassword").css("border", "1px solid #2ecc71");
-            $("#registerPassword").css("background", "#fff");
-            $("#errorPasswordDisplay").hide();
+            $("#appointmentDate").css("border", "1px solid #2ecc71");
+            $("#appointmentDate").css("background", "#fff");
+            $("#errorAppointmentDateDisplay").hide();
 
         } else {
 
-            $("#errorPasswordDisplay").html("<small>Password should at least 8 characters.</small>");
-            $("#errorPasswordDisplay").addClass("text-danger text-center");
-            $("#errorPasswordDisplay").show();
-            $("#registerPassword").css("border", "1px solid #f25a6b");
-            $("#registerPassword").css("background", "#fde8eb");
+            $("#errorAppointmentDateDisplay").html("<small>Please choose desired date.</small>");
+            $("#errorAppointmentDateDisplay").addClass("text-danger text-center");
+            $("#errorAppointmentDateDisplay").show();
+            $("#appointmentDate").css("border", "1px solid #f25a6b");
+            $("#appointmentDate").css("background", "#fde8eb");
             error = true;
 
         }
 
     }
 
-    function checkcPassword() {
+    function checkAppointmentTime() {
 
-        var password = $("#registerPassword").val();
-        var cpassword = $("#registercPassword").val();
+        var appointmentTime = $("#appointmentTime").val();
 
-        if( password === cpassword) {
+        if( appointmentTime !== "") {
 
-            $("#registercPassword").css("border", "1px solid #2ecc71");
-            $("#registercPassword").css("background", "#fff");
-            $("#errorcPasswordDisplay").hide();
+            $("#appointmentTime").css("border", "1px solid #2ecc71");
+            $("#appointmentTime").css("background", "#fff");
+            $("#errorAppointmentTimeDisplay").hide();
 
         } else {
 
-            $("#errorcPasswordDisplay").html("<small>Password did not match.</small>");
-            $("#errorcPasswordDisplay").addClass("text-danger text-center");
-            $("#errorcPasswordDisplay").show();
-            $("#registercPassword").css("border", "1px solid #f25a6b");
-            $("#registercPassword").css("background", "#fde8eb");
+            $("#errorAppointmentTimeDisplay").html("<small>Please choose desired time.</small>");
+            $("#errorAppointmentTimeDisplay").addClass("text-danger text-center");
+            $("#errorAppointmentTimeDisplay").show();
+            $("#appointmentTime").css("border", "1px solid #f25a6b");
+            $("#appointmentTime").css("background", "#fde8eb");
             error = true;
 
         }
 
     }
 
-    $(".registerForm").submit(function() {
+    function checkPurpose() {
+
+        var requestpurpose = $("#requestpurpose").val();
+
+        if( appointmentTime !== "") {
+
+            $("#requestpurpose").css("border", "1px solid #2ecc71");
+            $("#requestpurpose").css("background", "#fff");
+            $("#errorPurposeDisplay").hide();
+
+        } else {
+
+            $("#errorPurposeDisplay").html("<small>Any reason for appointment?</small>");
+            $("#errorPurposeDisplay").addClass("text-danger text-center");
+            $("#errorPurposeDisplay").show();
+            $("#requestpurpose").css("border", "1px solid #f25a6b");
+            $("#requestpurpose").css("background", "#fde8eb");
+            error = true;
+
+        }
+
+    }
+
+    $("#appointmentForm").submit(function() {
 
         error = false;
 
-        checkUsername();
+        checkFullname();
         checkEmail();
         checkNumber();
-        checkPassword();
-        checkcPassword();
-
-        if ( error === false ) {
-
-            return true;               
-
-        } else {
-
-            alert("Please fill up the form correctly.");
-            return false;
-
-        }     
-    });
-
-    /*
-        Setting up of account validation
-     */
-    
-    $("#reg-fname").focusout(function(){
-        checkFirstName();
-    });
-
-    $("#reg-mname").focusout(function(){
-        checkMiddleName();
-    });
-
-    $("#reg-lname").focusout(function(){
-        checkLastName();
-    });
-
-    function checkFirstName() {
-
-        var pattern = /^[a-zA-Z,. ]*$/;
-        var firstname = $("#reg-fname").val();
-
-        if( pattern.test(firstname) && firstname !== "") {
-
-            $("#reg-fname").css("border", "1px solid #2ecc71");
-            $("#reg-fname").css("background", "#fff");
-            $("#errorFirstNameDisplay").hide();
-
-        } else {
-
-            $("#errorFirstNameDisplay").html("<small>Invalid name format. Special characters not allowed.</small>");
-            $("#errorFirstNameDisplay").addClass("text-danger mx-lg-2");
-            $("#errorFirstNameDisplay").show();
-            $("#reg-fname").css("border", "1px solid #f25a6b");
-            $("#reg-fname").css("background", "#fde8eb");
-            error = true;
-
-        }
-
-    }
-
-    function checkMiddleName() {
-
-        var pattern = /^[a-zA-Z ]*$/;
-        var middlename = $("#reg-mname").val();
-
-        if( pattern.test(middlename) && middlename !== "") {
-
-            $("#reg-mname").css("border", "1px solid #2ecc71");
-            $("#reg-mname").css("background", "#fff");
-            $("#errorMiddleNameDisplay").hide();
-
-        } else {
-
-            $("#errorMiddleNameDisplay").html("<small>Invalid name format. Special characters not allowed.</small>");
-            $("#errorMiddleNameDisplay").addClass("text-danger mx-lg-2");
-            $("#errorMiddleNameDisplay").show();
-            $("#reg-mname").css("border", "1px solid #f25a6b");
-            $("#reg-mname").css("background", "#fde8eb");
-            error = true;
-
-        }
-
-    }
-
-    function checkLastName() {
-
-        var pattern = /^[a-zA-Z ]*$/;
-        var lastname = $("#reg-lname").val();
-
-        if( pattern.test(lastname) && lastname !== "") {
-
-            $("#reg-lname").css("border", "1px solid #2ecc71");
-            $("#reg-lname").css("background", "#fff");
-            $("#errorLastNameDisplay").hide();
-
-        } else {
-
-            $("#errorLastNameDisplay").html("<small>Invalid name format. Special characters not allowed.</small>");
-            $("#errorLastNameDisplay").addClass("text-danger mx-lg-2");
-            $("#errorLastNameDisplay").show();
-            $("#reg-lname").css("border", "1px solid #f25a6b");
-            $("#reg-lname").css("background", "#fde8eb");
-            error = true;
-
-        }
-
-    }
-
-    $(".registerSetupForm").submit(function() {
-
-        error = false;
-
-        checkFirstName();
-        checkMiddleName();
-        checkLastName();
+        checkAppointmentDate();
+        checkAppointmentTime();
+        checkPurpose();
 
         if ( error === false ) {
 

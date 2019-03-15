@@ -17,3 +17,4 @@
 <script type="text/javascript" src="./assets/js/jquery.timepicker.min.js"></script>
 <script type="text/javascript" src="./assets/js/sweetalert.min.js"></script>
 <script type="text/javascript" src="./assets/js/sweetalert2.all.min.js"></script>
+<script type="text/javascript" src="./appointment-validation.js"></script>
